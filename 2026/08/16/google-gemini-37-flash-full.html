@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google выпустил Gemini 3.7 Flash — AI Дайджест</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f0f0f;
+            color: #e0e0e0;
+            line-height: 1.7;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .meta {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        .category {
+            display: inline-block;
+            background: #4285f4;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 2em;
+            color: #fff;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+        .content {
+            font-size: 1.1em;
+            color: #d0d0d0;
+            margin-bottom: 30px;
+        }
+        .content p {
+            margin-bottom: 18px;
+            text-align: justify;
+        }
+        .highlight {
+            background: rgba(66, 133, 244, 0.15);
+            border-left: 3px solid #4285f4;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+        .stat-number {
+            font-size: 1.5em;
+            color: #4285f4;
+            font-weight: 700;
+        }
+        .stat-label {
+            font-size: 0.85em;
+            color: #888;
+            margin-top: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.9em;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        th {
+            color: #fff;
+            font-weight: 600;
+        }
+        .source {
+            border-top: 1px solid #333;
+            padding-top: 20px;
+            color: #888;
+            font-size: 0.9em;
+        }
+        .source a {
+            color: #4a9eff;
+            text-decoration: none;
+        }
+        .back {
+            margin-top: 40px;
+        }
+        .back a {
+            color: #888;
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="meta">16 августа 2026 • AI Дайджест</div>
+        <div class="category">🤖 Модели</div>
+        <h1>Google выпустил Gemini 3.7 Flash: улучшение в программировании на 16 пунктов по SWE-bench</h1>
+        <div class="content">
+            <p>Google выпустил модель Gemini 3.7 Flash 13 августа 2026 года — всего через три недели после запуска Gemini 3.6 Flash. Новая модель предлагается по цене вдвое ниже предшественницы ($0.50 против $1.00 за входной миллион токенов) при значительном росте качества программирования.</p>
+
+            <div class="highlight">
+                <strong>Ключевые улучшения:</strong><br>
+                • SWE-bench: +16.1% → 57.8% (выше Claude Sonnet 4.6!)<br>
+                • Aider polyglot: +4.5% → 80.2%<br>
+                • BigCodeBench: +9.7% → 81.4%<br>
+                • Цена: 50% от стоимости 3.6 Flash<br>
+                • Context window: 1M токенов
+            </div>
+
+            <h2>Бенчмарки: детальное сравнение</h2>
+
+            <table>
+                <tr>
+                    <th>Бенчмарк</th>
+                    <th>Gemini 3.7 Flash</th>
+                    <th>Gemini 3.6 Flash</th>
+                    <th>Изменение</th>
+                </tr>
+                <tr>
+                    <td>SWE-bench</td>
+                    <td>57.8%</td>
+                    <td>41.7%</td>
+                    <td style="color: #4caf50;">+16.1%</td>
+                </tr>
+                <tr>
+                    <td>SWE-bench Verified</td>
+                    <td>60.2%</td>
+                    <td>44.8%</td>
+                    <td style="color: #4caf50;">+15.4%</td>
+                </tr>
+                <tr>
+                    <td>Aider polyglot</td>
+                    <td>80.2%</td>
+                    <td>75.7%</td>
+                    <td style="color: #4caf50;">+4.5%</td>
+                </tr>
+                <tr>
+                    <td>BigCodeBench</td>
+                    <td>81.4%</td>
+                    <td>71.7%</td>
+                    <td style="color: #4caf50;">+9.7%</td>
+                </tr>
+                <tr>
+                    <td>BigCodeBench Hard</td>
+                    <td>66.5%</td>
+                    <td>56.9%</td>
+                    <td style="color: #4caf50;">+9.6%</td>
+                </tr>
+                <tr>
+                    <td>LiveCodeBench</td>
+                    <td>57.3%</td>
+                    <td>57.1%</td>
+                    <td style="color: #4caf50;">+0.2%</td>
+                </tr>
+            </table>
+
+            <p>Примечательно, что Gemini 3.7 Flash превосходит Claude Sonnet 4.6 (56.4%) и практически догоняет o4-mini-high (58.9%) по SWE-bench, при этом стоимость в 10 раз ниже.</p>
+
+            <h2>Что изменилось в модели?</h2>
+
+            <p>Google не раскрывает детали архитектуры, но наблюдатели отмечают:</p>
+
+            <ul style="margin-bottom: 18px; padding-left: 20px;">
+                <li><strong>Специализация на коде:</strong> Модель явно оптимизирована для программирования, даже в ущерб некоторым другим задачам</li>
+                <li><strong>Ценовая агрессия:</strong> 50% снижение цены при росте качества — явный вызов конкурентам</li>
+                <li><strong>Скорость сохранена:</strong> Модель остаётся в категории Flash (быстрых)</li>
+            </ul>
+
+            <h2>Мнение индустрии</h2>
+
+            <p>Эксперты называют запуск "необычно быстрым" — три недели между версиями указывают на агрессивную целевую доработку модели под задачи программирования. Это может быть ответом на растущую конкуренцию со стороны китайских моделей (Qwen 4 Coder, DeepSeek V4) и внутреннего давления в Google.</p>
+
+            <p>Согласно данным аналитиков, Gemini 2.5 Pro превысил 6 млн платящих корпоративных пользователей в марте 2026, а общая выручка от подписок и облачных сервисов превысила $1.5 млрд. Улучшение в программировании — ключевая стратегия Google для удержания корпоративных клиентов.</p>
+        </div>
+        <div class="source">
+            <div><strong>Источники:</strong> <a href="https://miraflow.ai/blog/gemini-3-7-flash-explained-coding-benchmarks-2026" target="_blank">Miraflow Analysis</a>, <a href="https://ai.google.dev" target="_blank">Google AI Developer Blog</a></div>
+        </div>
+        <div class="back">
+            <a href="../../../..">← Назад к архиву</a>
+        </div>
+    </div>
+</body>
+</html>
