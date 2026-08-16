@@ -476,10 +476,12 @@ def generate_index(all_news, repo_root):
                     </div>
                 </div>""")
         
+        cards_html = '\n'.join(cards)
+        
         section = f"""        <div class="date-section">
             <div class="date-header">{date_str}</div>
             <div class="news-grid">
-{cards}
+{cards_html}
             </div>
         </div>"""
         date_sections.append(section)
