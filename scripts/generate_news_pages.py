@@ -2,11 +2,16 @@
 """
 Генератор HTML-страниц новостей из AI-дайджеста.
 Создаёт отдельные HTML для каждой новости + обновляет index.html
+
+Поддерживает:
+- Краткие сводки из дайджеста (по умолчанию)
+- Полные переведённые статьи (через --full-content или JSON input)
 """
 
 import re
 import os
 import sys
+import json
 from datetime import datetime
 from pathlib import Path
 
@@ -120,6 +125,15 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         .original a {{
             color: #666;
         }}
+        .notice {{
+            margin: 20px 0;
+            padding: 12px 15px;
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 6px;
+            color: #ffc107;
+            font-size: 0.9em;
+        }}
         .back {{
             margin-top: 40px;
         }}
@@ -147,12 +161,13 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         <div class="meta">{date_str} • AI Дайджест</div>
         <div class="category">{category}</div>
         <h1>{title}</h1>
+        {notice}
         <div class="content">
             {content}
         </div>
         <div class="source">
             <div><strong>Источник:</strong> {source}</div>
-            <div class="original"><a href="{source_url}" target="_blank">🔗 Оригинальная статья</a></div>
+            {original_link}
         </div>
         <div class="back">
             <a href="{back_path}">← Назад к архиву</a>
@@ -241,6 +256,21 @@ INDEX_TEMPLATE = """<!DOCTYPE html>
             line-height: 1.4;
             color: #fff;
         }}
+        .card-links {{
+            margin-top: 12px;
+            display: flex;
+            gap: 15px;
+            font-size: 0.85em;
+        }}
+        .card-links a {{
+            display: inline;
+        }}
+        .preview-btn {{
+            color: #4a9eff !important;
+        }}
+        .git-btn {{
+            color: #888 !important;
+        }}
         .footer {{
             text-align: center;
             margin-top: 60px;
@@ -284,9 +314,6 @@ def parse_digest(digest_text, date_obj):
     category_pattern = r'(?:^|\n)(🏆|🤖|💰|🔓|🔬|🏢|🛡️|⚖️)[^\n]*\n'
     sections = re.split(category_pattern, digest_text)
     
-    # sections: ['header', 'emoji', 'content', 'emoji', 'content', ...]
-    current_category = None
-    
     for i in range(1, len(sections), 2):
         if i + 1 >= len(sections):
             break
@@ -294,18 +321,12 @@ def parse_digest(digest_text, date_obj):
         emoji = sections[i]
         section_content = sections[i + 1]
         
-        # Извлекаем название категории
         cat_match = re.search(rf'{emoji}([^\n]+)', section_content[:200])
         if cat_match:
             current_category = emoji + cat_match.group(1).strip()
         else:
             current_category = emoji + ' Новости'
         
-        # Ищем заголовки внутри секции: **жирный текст** в начале строки/абзаца
-        # Разбиваем на блоки по заголовкам
-        headline_pattern = r'\*\*([^*]+)\*\*'
-        
-        # Находим все заголовки в секции
         parts = re.split(r'(?=\*\*[^*]+\*\*)', section_content)
         
         for part in parts:
@@ -313,7 +334,6 @@ def parse_digest(digest_text, date_obj):
             if not part:
                 continue
                 
-            # Ищем заголовок в начале
             title_match = re.match(r'\*\*([^*]+)\*\*(.*)', part, re.DOTALL)
             if not title_match:
                 continue
@@ -321,11 +341,9 @@ def parse_digest(digest_text, date_obj):
             title = title_match.group(1).strip()
             rest = title_match.group(2).strip()
             
-            # Убираем точку в конце заголовка, если она есть
             if title.endswith('.'):
                 title = title[:-1].strip()
             
-            # Извлекаем контент и источник
             content_lines = []
             source = 'aiweekly.co'
             source_url = ''
@@ -338,11 +356,9 @@ def parse_digest(digest_text, date_obj):
                     source_raw = re.sub(r'\*?\(Источник:\s*', '', line)
                     source_raw = re.sub(r'\)\*?', '', source_raw).strip()
                     source = source_raw
-                    # Извлекаем URL из источника
                     urls = re.findall(r'https?://[^\s\)]+', source_raw)
                     if urls:
                         source_url = urls[0]
-                        # Убираем URL из отображаемого источника
                         source = re.sub(r'https?://[^\s\)]+', '', source_raw).strip(' /')
                     continue
                 content_lines.append(line)
@@ -360,12 +376,11 @@ def parse_digest(digest_text, date_obj):
 
 
 def content_to_html(content_text):
-    """Преобразует текст контента в HTML параграфы."""
+    """Преобразует текст контента в HTML."""
     paragraphs = []
     for para in content_text.split('\n'):
         para = para.strip()
         if para:
-            # Выделяем списки с •
             if para.startswith('•'):
                 if not paragraphs or not paragraphs[-1].startswith('<ul>'):
                     paragraphs.append('<ul>')
@@ -381,31 +396,33 @@ def content_to_html(content_text):
     return '\n            '.join(paragraphs)
 
 
-def generate_news_page(news_item, date_obj, output_dir, repo_url="https://github.com/bimaevoleg-rgb/news/blob/main"):
+def generate_news_page(news_item, date_obj, output_dir):
     """Генерирует HTML-страницу для одной новости."""
     color = CATEGORY_COLORS.get(news_item['category'], DEFAULT_COLOR)
     slug = slugify(news_item['title'])
     filename = f"{slug}.html"
     filepath = output_dir / filename
     
-    # Рассчитываем путь назад
     depth = len(output_dir.relative_to(Path.cwd()).parts)
     back_path = '/'.join(['..'] * depth) or '.'
     
     content_html = content_to_html(news_item.get('full_content', news_item['content']))
     
-    # Извлекаем URL источника
     source_url = news_item.get('source_url', '')
     if not source_url:
         urls = re.findall(r'https?://[^\s\)]+', news_item['source'])
-        source_url = urls[0] if urls else '#'
+        source_url = urls[0] if urls else ''
     
-    # Форматируем источники как ссылки
-    sources = news_item['source']
-    source_html = sources
-    for url in re.findall(r'https?://[^\s\)]+', sources):
-        domain = url.replace('https://', '').replace('http://', '').split('/')[0]
-        source_html = source_html.replace(url, f'<a href="{url}" target="_blank">{domain}</a>')
+    source = news_item['source']
+    
+    # Определяем тип контента
+    is_full = news_item.get('is_full', False)
+    if is_full:
+        notice = ''
+        original_link = f'<div class="original"><a href="{source_url}" target="_blank">🔗 Оригинальная статья</a></div>' if source_url else ''
+    else:
+        notice = '<div class="notice">⚡ Это краткая сводка. Полный перевод статьи будет добавлен позже.</div>'
+        original_link = f'<div class="original"><a href="{source_url}" target="_blank">🔗 Источник</a></div>' if source_url else ''
     
     html = HTML_TEMPLATE.format(
         title=news_item['title'],
@@ -413,8 +430,9 @@ def generate_news_page(news_item, date_obj, output_dir, repo_url="https://github
         date_str=date_obj.strftime('%d %B %Y'),
         category=news_item['category'],
         content=content_html,
-        source=source_html,
-        source_url=source_url,
+        source=source,
+        notice=notice,
+        original_link=original_link,
         back_path=back_path
     )
     
@@ -424,7 +442,6 @@ def generate_news_page(news_item, date_obj, output_dir, repo_url="https://github
 
 def generate_index(all_news, repo_root):
     """Генерирует index.html со всеми новостями."""
-    # Группируем по датам
     by_date = {}
     for item in all_news:
         date_key = item['date'].strftime('%Y/%m/%d')
@@ -432,7 +449,6 @@ def generate_index(all_news, repo_root):
             by_date[date_key] = []
         by_date[date_key].append(item)
     
-    # Сортируем даты (новые сверху)
     sorted_dates = sorted(by_date.keys(), reverse=True)
     
     date_sections = []
@@ -445,15 +461,18 @@ def generate_index(all_news, repo_root):
         for item in items:
             color = CATEGORY_COLORS.get(item['category'], DEFAULT_COLOR)
             rel_path = f"{date_key}/{item['filename']}"
-            # Генерируем preview URL через htmlpreview.github.io
             preview_url = f"https://htmlpreview.github.io/?https://github.com/bimaevoleg-rgb/news/blob/main/{rel_path}"
+            is_full = item.get('is_full', False)
+            full_badge = ' <span style="color: #ffc107;">★</span>' if is_full else ''
+            
             cards.append(f"""                <div class="news-card">
                     <a href="{rel_path}">
                         <span class="category" style="background: {color};">{item['category']}</span>
-                        <h3>{item['title']}</h3>
+                        <h3>{item['title']}{full_badge}</h3>
                     </a>
-                    <div style="margin-top: 10px; font-size: 0.85em;">
-                        <a href="{preview_url}" target="_blank" style="color: {color};">👁️ Предпросмотр</a>
+                    <div class="card-links">
+                        <a href="{preview_url}" target="_blank" class="preview-btn">👁️ Предпросмотр</a>
+                        <a href="https://github.com/bimaevoleg-rgb/news/blob/main/{rel_path}" target="_blank" class="git-btn">📄 GitHub</a>
                     </div>
                 </div>""")
         
@@ -491,17 +510,18 @@ def scan_existing_news(repo_root):
                     continue
                 
                 for html_file in day_dir.glob('*.html'):
-                    # Извлекаем заголовок из HTML
                     content = html_file.read_text(encoding='utf-8')
                     title_match = re.search(r'<title>(.+?) — AI Дайджест</title>', content)
                     cat_match = re.search(r'<div class="category">(.+?)</div>', content)
+                    is_full = 'is_full": true' not in content and '⚡ Это краткая сводка' not in content
                     
                     if title_match:
                         all_news.append({
                             'date': date_obj,
                             'filename': html_file.name,
                             'title': title_match.group(1),
-                            'category': cat_match.group(1) if cat_match else '🔹 Новости'
+                            'category': cat_match.group(1) if cat_match else '🔹 Новости',
+                            'is_full': is_full
                         })
     
     return sorted(all_news, key=lambda x: (x['date'], x['filename']), reverse=True)
@@ -510,13 +530,14 @@ def scan_existing_news(repo_root):
 def main():
     repo_root = Path('/root/.openclaw/workspace/news-repo')
     
-    # Проверяем, передан ли текст дайджеста
     if len(sys.argv) < 2:
-        print("Usage: python generate_news_pages.py <digest_file.txt> [YYYY-MM-DD]")
+        print("Usage: python generate_news_pages.py <digest_file.txt> [YYYY-MM-DD] [--full-content <file>]")
         print("   or: cat digest.txt | python generate_news_pages.py -")
+        print("\nOptions:")
+        print("  --full-content <json_file>  JSON with full translated articles")
         sys.exit(1)
     
-    # Читаем дайджест
+    # Read digest
     if sys.argv[1] == '-':
         digest_text = sys.stdin.read()
     else:
@@ -526,11 +547,10 @@ def main():
             sys.exit(1)
         digest_text = digest_path.read_text(encoding='utf-8')
     
-    # Определяем дату
-    if len(sys.argv) >= 3:
+    # Parse date
+    if len(sys.argv) >= 3 and not sys.argv[2].startswith('--'):
         date_obj = datetime.strptime(sys.argv[2], '%Y-%m-%d')
     else:
-        # Пытаемся извлечь из текста
         date_match = re.search(r'Дайджест — (\d{1,2})\s+([а-яА-Я]+)\s+(\d{4})', digest_text)
         if date_match:
             months = {
@@ -545,11 +565,19 @@ def main():
         else:
             date_obj = datetime.now()
     
-    # Создаём директорию
+    # Check for full content JSON
+    full_content = {}
+    if '--full-content' in sys.argv:
+        idx = sys.argv.index('--full-content')
+        if idx + 1 < len(sys.argv):
+            full_path = Path(sys.argv[idx + 1])
+            if full_path.exists():
+                with open(full_path, 'r', encoding='utf-8') as f:
+                    full_content = json.load(f)
+    
     output_dir = repo_root / str(date_obj.year) / f"{date_obj.month:02d}" / f"{date_obj.day:02d}"
     output_dir.mkdir(parents=True, exist_ok=True)
     
-    # Парсим и генерируем
     news_items = parse_digest(digest_text, date_obj)
     
     if not news_items:
@@ -560,23 +588,29 @@ def main():
     
     new_entries = []
     for item in news_items:
+        slug = slugify(item['title'])
+        
+        # Check if full content exists for this article
+        if slug in full_content:
+            item['full_content'] = full_content[slug]
+            item['is_full'] = True
+            print(f"  ✓ {slug}.html (FULL)")
+        else:
+            print(f"  ✓ {slug}.html (summary)")
+        
         filename = generate_news_page(item, date_obj, output_dir)
         new_entries.append({
             'date': date_obj,
             'filename': filename,
             'title': item['title'],
-            'category': item['category']
+            'category': item['category'],
+            'is_full': item.get('is_full', False)
         })
-        print(f"  ✓ {filename}")
     
-    # Сканируем существующие + добавляем новые
     all_news = scan_existing_news(repo_root)
-    
-    # Обновляем index
     generate_index(all_news, repo_root)
     print(f"  ✓ index.html updated")
     
-    # Git коммит
     os.chdir(repo_root)
     os.system('git add -A')
     os.system(f'git commit -m "Add news for {date_obj.strftime("%Y-%m-%d")}: {len(news_items)} articles"')
