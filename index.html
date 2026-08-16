@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Дайджест — Архив новостей</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #222;
+        }
+        h1 {
+            font-size: 2.5em;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+        .date-section {
+            margin-bottom: 40px;
+        }
+        .date-header {
+            font-size: 1.5em;
+            color: #fff;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #333;
+        }
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 15px;
+        }
+        .news-card {
+            background: #161616;
+            border: 1px solid #222;
+            border-radius: 8px;
+            padding: 20px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .news-card:hover {
+            transform: translateY(-2px);
+            border-color: #444;
+        }
+        .news-card a {
+            color: #e0e0e0;
+            text-decoration: none;
+            display: block;
+        }
+        .news-card .category {
+            display: inline-block;
+            font-size: 0.75em;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            color: white;
+        }
+        .news-card h3 {
+            font-size: 1.1em;
+            line-height: 1.4;
+            color: #fff;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #222;
+            color: #444;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔥 AI Дайджест</h1>
+            <div class="subtitle">Архив новостей AI-индустрии</div>
+        </header>
+
+        <div class="date-section">
+            <div class="date-header">16 августа 2026</div>
+            <div class="news-grid">
+                <div class="news-card">
+                    <a href="2026/08/16/nvidia-spacex-intel-sec-13f.html">
+                        <span class="category" style="background: #ff6b35;">🏆 Главное событие</span>
+                        <h3>Nvidia раскрыла огромные позиции в SpaceX ($20.98 млрд) и Intel ($29.99 млрд)</h3>
+                    </a>
+                </div>
+                <div class="news-card">
+                    <a href="2026/08/16/google-gemini-37-flash.html">
+                        <span class="category" style="background: #4285f4;">🤖 Релизы</span>
+                        <h3>Google выпустил Gemini 3.7 Flash с рекордным приростом в кодинге</h3>
+                    </a>
+                </div>
+                <div class="news-card">
+                    <a href="2026/08/16/openai-enterprise-revenue.html">
+                        <span class="category" style="background: #10a37f;">💰 Рынок</span>
+                        <h3>OpenAI: корпоративная выручка впервые превысила потребительскую</h3>
+                    </a>
+                </div>
+                <div class="news-card">
+                    <a href="2026/08/16/qwen-3-billion-downloads.html">
+                        <span class="category" style="background: #ff6a00;">🔓 Open-source</span>
+                        <h3>Qwen от Alibaba превысил 3 млрд загрузок — доминирование в open-weights</h3>
+                    </a>
+                </div>
+                <div class="news-card">
+                    <a href="2026/08/16/anthropic-misalignment-risk.html">
+                        <span class="category" style="background: #cc785c;">🔬 Исследования</span>
+                        <h3>Anthropic повысила оценку риска катастрофического несоответствия</h3>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Составлено с помощью AI • Источники указаны в каждой новости
+        </div>
+    </div>
+</body>
+</html>
