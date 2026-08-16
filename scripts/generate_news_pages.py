@@ -36,7 +36,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #0f0f0f;
             color: #e0e0e0;
-            line-height: 1.6;
+            line-height: 1.7;
             padding: 40px 20px;
         }}
         .container {{
@@ -70,7 +70,28 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             margin-bottom: 30px;
         }}
         .content p {{
-            margin-bottom: 15px;
+            margin-bottom: 18px;
+            text-align: justify;
+        }}
+        .content h2, .content h3 {{
+            color: #fff;
+            margin: 30px 0 15px;
+        }}
+        .content ul, .content ol {{
+            margin: 15px 0 15px 25px;
+        }}
+        .content li {{
+            margin-bottom: 8px;
+        }}
+        .content blockquote {{
+            border-left: 3px solid {color};
+            padding-left: 20px;
+            margin: 20px 0;
+            color: #aaa;
+            font-style: italic;
+        }}
+        .content strong {{
+            color: #fff;
         }}
         .highlight {{
             background: {color}15;
@@ -92,6 +113,13 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         .source a:hover {{
             text-decoration: underline;
         }}
+        .original {{
+            margin-top: 10px;
+            font-size: 0.85em;
+        }}
+        .original a {{
+            color: #666;
+        }}
         .back {{
             margin-top: 40px;
         }}
@@ -100,18 +128,31 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             text-decoration: none;
             font-size: 0.9em;
         }}
+        .preview-link {{
+            margin-top: 15px;
+            padding: 10px 15px;
+            background: {color}22;
+            border: 1px solid {color}44;
+            border-radius: 6px;
+        }}
+        .preview-link a {{
+            color: {color};
+            text-decoration: none;
+            font-weight: 500;
+        }}
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="meta">{date_str}</div>
+        <div class="meta">{date_str} • AI Дайджест</div>
         <div class="category">{category}</div>
         <h1>{title}</h1>
         <div class="content">
             {content}
         </div>
         <div class="source">
-            Источник: {source}
+            <div><strong>Источник:</strong> {source}</div>
+            <div class="original"><a href="{source_url}" target="_blank">🔗 Оригинальная статья</a></div>
         </div>
         <div class="back">
             <a href="{back_path}">← Назад к архиву</a>
@@ -287,14 +328,22 @@ def parse_digest(digest_text, date_obj):
             # Извлекаем контент и источник
             content_lines = []
             source = 'aiweekly.co'
+            source_url = ''
             
             for line in rest.split('\n'):
                 line = line.strip()
                 if not line or line.startswith('---'):
                     continue
                 if line.startswith('*(Источник:') or line.startswith('Источник:'):
-                    source = re.sub(r'\*?\(Источник:\s*', '', line)
-                    source = re.sub(r'\)\*?', '', source).strip()
+                    source_raw = re.sub(r'\*?\(Источник:\s*', '', line)
+                    source_raw = re.sub(r'\)\*?', '', source_raw).strip()
+                    source = source_raw
+                    # Извлекаем URL из источника
+                    urls = re.findall(r'https?://[^\s\)]+', source_raw)
+                    if urls:
+                        source_url = urls[0]
+                        # Убираем URL из отображаемого источника
+                        source = re.sub(r'https?://[^\s\)]+', '', source_raw).strip(' /')
                     continue
                 content_lines.append(line)
             
@@ -303,7 +352,8 @@ def parse_digest(digest_text, date_obj):
                     'category': current_category,
                     'title': title,
                     'content': '\n'.join(content_lines),
-                    'source': source
+                    'source': source,
+                    'source_url': source_url
                 })
     
     return news_items
@@ -331,7 +381,7 @@ def content_to_html(content_text):
     return '\n            '.join(paragraphs)
 
 
-def generate_news_page(news_item, date_obj, output_dir):
+def generate_news_page(news_item, date_obj, output_dir, repo_url="https://github.com/bimaevoleg-rgb/news/blob/main"):
     """Генерирует HTML-страницу для одной новости."""
     color = CATEGORY_COLORS.get(news_item['category'], DEFAULT_COLOR)
     slug = slugify(news_item['title'])
@@ -342,7 +392,13 @@ def generate_news_page(news_item, date_obj, output_dir):
     depth = len(output_dir.relative_to(Path.cwd()).parts)
     back_path = '/'.join(['..'] * depth) or '.'
     
-    content_html = content_to_html(news_item['content'])
+    content_html = content_to_html(news_item.get('full_content', news_item['content']))
+    
+    # Извлекаем URL источника
+    source_url = news_item.get('source_url', '')
+    if not source_url:
+        urls = re.findall(r'https?://[^\s\)]+', news_item['source'])
+        source_url = urls[0] if urls else '#'
     
     # Форматируем источники как ссылки
     sources = news_item['source']
@@ -358,6 +414,7 @@ def generate_news_page(news_item, date_obj, output_dir):
         category=news_item['category'],
         content=content_html,
         source=source_html,
+        source_url=source_url,
         back_path=back_path
     )
     
@@ -388,11 +445,16 @@ def generate_index(all_news, repo_root):
         for item in items:
             color = CATEGORY_COLORS.get(item['category'], DEFAULT_COLOR)
             rel_path = f"{date_key}/{item['filename']}"
+            # Генерируем preview URL через htmlpreview.github.io
+            preview_url = f"https://htmlpreview.github.io/?https://github.com/bimaevoleg-rgb/news/blob/main/{rel_path}"
             cards.append(f"""                <div class="news-card">
                     <a href="{rel_path}">
                         <span class="category" style="background: {color};">{item['category']}</span>
                         <h3>{item['title']}</h3>
                     </a>
+                    <div style="margin-top: 10px; font-size: 0.85em;">
+                        <a href="{preview_url}" target="_blank" style="color: {color};">👁️ Предпросмотр</a>
+                    </div>
                 </div>""")
         
         section = f"""        <div class="date-section">

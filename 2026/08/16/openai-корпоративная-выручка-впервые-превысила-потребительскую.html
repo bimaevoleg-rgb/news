@@ -10,7 +10,7 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #0f0f0f;
             color: #e0e0e0;
-            line-height: 1.6;
+            line-height: 1.7;
             padding: 40px 20px;
         }
         .container {
@@ -44,7 +44,28 @@
             margin-bottom: 30px;
         }
         .content p {
-            margin-bottom: 15px;
+            margin-bottom: 18px;
+            text-align: justify;
+        }
+        .content h2, .content h3 {
+            color: #fff;
+            margin: 30px 0 15px;
+        }
+        .content ul, .content ol {
+            margin: 15px 0 15px 25px;
+        }
+        .content li {
+            margin-bottom: 8px;
+        }
+        .content blockquote {
+            border-left: 3px solid #666;
+            padding-left: 20px;
+            margin: 20px 0;
+            color: #aaa;
+            font-style: italic;
+        }
+        .content strong {
+            color: #fff;
         }
         .highlight {
             background: #66615;
@@ -66,6 +87,13 @@
         .source a:hover {
             text-decoration: underline;
         }
+        .original {
+            margin-top: 10px;
+            font-size: 0.85em;
+        }
+        .original a {
+            color: #666;
+        }
         .back {
             margin-top: 40px;
         }
@@ -74,18 +102,31 @@
             text-decoration: none;
             font-size: 0.9em;
         }
+        .preview-link {
+            margin-top: 15px;
+            padding: 10px 15px;
+            background: #66622;
+            border: 1px solid #66644;
+            border-radius: 6px;
+        }
+        .preview-link a {
+            color: #666;
+            text-decoration: none;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="meta">16 August 2026</div>
+        <div class="meta">16 August 2026 • AI Дайджест</div>
         <div class="category">💰 Новости</div>
         <h1>OpenAI: корпоративная выручка впервые превысила потребительскую</h1>
         <div class="content">
             <p>CFO Сара Фриар сообщила инвесторам, что линии выручки пересеклись: в начале года соотношение было 60/40 (потребитель/enterprise), теперь enterprise лидирует. Годовая выручка (run rate) достигла $40 млрд, рост за июль — 20% month-over-month. Рекламный бизнес приближается к $1 млрд run rate.</p>
         </div>
         <div class="source">
-            Источник: unite.ai / aiweekly.co
+            <div><strong>Источник:</strong> unite.ai / aiweekly.co</div>
+            <div class="original"><a href="#" target="_blank">🔗 Оригинальная статья</a></div>
         </div>
         <div class="back">
             <a href="../../../..">← Назад к архиву</a>
