@@ -1,0 +1,5 @@
+deploy_key
+deploy_key.pub
+scripts/__pycache__/
+*.pyc
+.DS_Store
