@@ -1,133 +1,278 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Архив AI-новостей | 16 августа 2026</title>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0a0a; color: #e5e5e5; }
-.container { max-width: 1100px; margin: 0 auto; padding: 40px 20px; }
-header { text-align: center; margin-bottom: 50px; }
-header h1 { font-size: 2.5rem; color: #fff; margin-bottom: 10px; }
-header p { color: #888; font-size: 1.1rem; }
-.date-badge { display: inline-block; background: #4a9eff; color: #fff; padding: 8px 20px; border-radius: 20px; font-size: 0.9rem; margin-top: 15px; }
-.news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-top: 30px; }
-.news-card { background: #161616; border-radius: 12px; padding: 25px; border: 1px solid #222; transition: border-color 0.2s; }
-.news-card:hover { border-color: #4a9eff; }
-.news-card .num { font-size: 2rem; color: #4a9eff; font-weight: bold; margin-bottom: 10px; }
-.news-card h3 { font-size: 1.2rem; color: #fff; margin-bottom: 12px; line-height: 1.3; }
-.news-card p { color: #aaa; font-size: 0.95rem; margin-bottom: 15px; line-height: 1.5; }
-.news-card .meta { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; }
-.news-card .tag { background: #222; color: #888; padding: 3px 10px; border-radius: 15px; font-size: 0.75rem; }
-.news-card a { color: #4a9eff; text-decoration: none; font-weight: 500; }
-.news-card a:hover { text-decoration: underline; }
-.stats { text-align: center; margin: 40px 0; padding: 20px; background: #161616; border-radius: 12px; }
-.stats .number { font-size: 3rem; color: #4a9eff; font-weight: bold; }
-.stats .label { color: #888; font-size: 1rem; }
-footer { text-align: center; margin-top: 50px; padding-top: 30px; border-top: 1px solid #222; color: #666; }
-footer a { color: #4a9eff; text-decoration: none; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Дайджест — Архив новостей</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #222;
+        }
+        h1 {
+            font-size: 2.5em;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+        .date-section {
+            margin-bottom: 40px;
+        }
+        .date-header {
+            font-size: 1.5em;
+            color: #fff;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #333;
+        }
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 15px;
+        }
+        .news-card {
+            background: #161616;
+            border: 1px solid #222;
+            border-radius: 8px;
+            padding: 20px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .news-card:hover {
+            transform: translateY(-2px);
+            border-color: #444;
+        }
+        .news-card a {
+            color: #e0e0e0;
+            text-decoration: none;
+            display: block;
+        }
+        .news-card .category {
+            display: inline-block;
+            font-size: 0.75em;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            color: white;
+        }
+        .news-card h3 {
+            font-size: 1.1em;
+            line-height: 1.4;
+            color: #fff;
+        }
+        .card-links {
+            margin-top: 12px;
+            display: flex;
+            gap: 15px;
+            font-size: 0.85em;
+        }
+        .card-links a {
+            display: inline;
+        }
+        .preview-btn {
+            color: #4a9eff !important;
+        }
+        .git-btn {
+            color: #888 !important;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #222;
+            color: #444;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-<header>
-<h1>📰 Архив AI-новостей</h1>
-<p>Ежедневная курируемая подборка ключевых событий AI-индустрии</p>
-<div class="date-badge">📅 16 августа 2026</div>
-</header>
+    <div class="container">
+        <header>
+            <h1>🔥 AI Дайджест</h1>
+            <div class="subtitle">Архив новостей AI-индустрии</div>
+        </header>
 
-<div class="stats">
-<div class="number">10</div>
-<div class="label">новостей за сегодня</div>
-</div>
+        <div class="date-section">
+            <div class="date-header">17 August 2026</div>
+            <div class="news-grid">
+                <div class="news-card">
+                    <a href="2026/08/17/spacex-закрыла-приобретение-cursor-ai-кодинг-становится-частью-космической-инфра.html">
+                        <span class="category" style="background: #666;">🏆 Новости</span>
+                        <h3>SpaceX закрыла приобретение Cursor — AI-кодинг становится частью космической инфраструктуры</h3>
+                    </a>
+                    <div class="card-links">
+                        <a href="https://htmlpreview.github.io/?https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/17/spacex-закрыла-приобретение-cursor-ai-кодинг-становится-частью-космической-инфра.html" target="_blank" class="preview-btn">👁️ Предпросмотр</a>
+                        <a href="https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/17/spacex-закрыла-приобретение-cursor-ai-кодинг-становится-частью-космической-инфра.html" target="_blank" class="git-btn">📄 GitHub</a>
+                    </div>
+                </div>
+                <div class="news-card">
+                    <a href="2026/08/17/8-anthropic-готовит-ipo-оценка-может-превзойти-spacex.html">
+                        <span class="category" style="background: #666;">💰 Новости</span>
+                        <h3>8. Anthropic готовит IPO — оценка может превзойти SpaceX</h3>
+                    </a>
+                    <div class="card-links">
+                        <a href="https://htmlpreview.github.io/?https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/17/8-anthropic-готовит-ipo-оценка-может-превзойти-spacex.html" target="_blank" class="preview-btn">👁️ Предпросмотр</a>
+                        <a href="https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/17/8-anthropic-готовит-ipo-оценка-может-превзойти-spacex.html" target="_blank" class="git-btn">📄 GitHub</a>
+                    </div>
+                </div>
+                <div class="news-card">
+                    <a href="2026/08/17/7-гендиректор-anthropic-недоверие-к-ai-это-фундаментальный-кризис-доверия.html">
+                        <span class="category" style="background: #666;">🤖 Новости</span>
+                        <h3>7. Гендиректор Anthropic: недоверие к AI — это фундаментальный кризис доверия</h3>
+                    </a>
+                    <div class="card-links">
+                        <a href="https://htmlpreview.github.io/?https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/17/7-гендиректор-anthropic-недоверие-к-ai-это-фундаментальный-кризис-доверия.html" target="_blank" class="preview-btn">👁️ Предпросмотр</a>
+                        <a href="https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/17/7-гендиректор-anthropic-недоверие-к-ai-это-фундаментальный-кризис-доверия.html" target="_blank" class="git-btn">📄 GitHub</a>
+                    </div>
+                </div>
+                <div class="news-card">
+                    <a href="2026/08/17/6-bis-ужесточила-экспортный-контроль-лицензии-нужны-для-d5-и-макао.html">
+                        <span class="category" style="background: #666;">🤖 Новости</span>
+                        <h3>6. BIS ужесточила экспортный контроль: лицензии нужны для D:5 и Макао</h3>
+                    </a>
+                    <div class="card-links">
+                        <a href="https://htmlpreview.github.io/?https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/17/6-bis-ужесточила-экспортный-контроль-лицензии-нужны-для-d5-и-макао.html" target="_blank" class="preview-btn">👁️ Предпросмотр</a>
+                        <a href="https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/17/6-bis-ужесточила-экспортный-контроль-лицензии-нужны-для-d5-и-макао.html" target="_blank" class="git-btn">📄 GitHub</a>
+                    </div>
+                </div>
+                <div class="news-card">
+                    <a href="2026/08/17/5-nvidia-сокращает-финансовые-гарантии-для-дата-центра-openai-в-огайо.html">
+                        <span class="category" style="background: #666;">🤖 Новости</span>
+                        <h3>5. Nvidia сокращает финансовые гарантии для дата-центра OpenAI в Огайо</h3>
+                    </a>
+                    <div class="card-links">
+                        <a href="https://htmlpreview.github.io/?https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/17/5-nvidia-сокращает-финансовые-гарантии-для-дата-центра-openai-в-огайо.html" target="_blank" class="preview-btn">👁️ Предпросмотр</a>
+                        <a href="https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/17/5-nvidia-сокращает-финансовые-гарантии-для-дата-центра-openai-в-огайо.html" target="_blank" class="git-btn">📄 GitHub</a>
+                    </div>
+                </div>
+                <div class="news-card">
+                    <a href="2026/08/17/4-alibaba-qwen-превзошел-meta-и-google-3-миллиарда-загрузок.html">
+                        <span class="category" style="background: #666;">🤖 Новости</span>
+                        <h3>4. Alibaba Qwen превзошел Meta и Google — 3 миллиарда загрузок</h3>
+                    </a>
+                    <div class="card-links">
+                        <a href="https://htmlpreview.github.io/?https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/17/4-alibaba-qwen-превзошел-meta-и-google-3-миллиарда-загрузок.html" target="_blank" class="preview-btn">👁️ Предпросмотр</a>
+                        <a href="https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/17/4-alibaba-qwen-превзошел-meta-и-google-3-миллиарда-загрузок.html" target="_blank" class="git-btn">📄 GitHub</a>
+                    </div>
+                </div>
+                <div class="news-card">
+                    <a href="2026/08/17/3-ieee-spectrum-agentic-ai-делает-cpu-новым-узким-местом-производительности.html">
+                        <span class="category" style="background: #666;">🤖 Новости</span>
+                        <h3>3. IEEE Spectrum: agentic AI делает CPU новым узким местом производительности</h3>
+                    </a>
+                    <div class="card-links">
+                        <a href="https://htmlpreview.github.io/?https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/17/3-ieee-spectrum-agentic-ai-делает-cpu-новым-узким-местом-производительности.html" target="_blank" class="preview-btn">👁️ Предпросмотр</a>
+                        <a href="https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/17/3-ieee-spectrum-agentic-ai-делает-cpu-новым-узким-местом-производительности.html" target="_blank" class="git-btn">📄 GitHub</a>
+                    </div>
+                </div>
+                <div class="news-card">
+                    <a href="2026/08/17/2-perceptionbench-мультимодельные-ai-видят-значительно-хуже-чем-ожидалось.html">
+                        <span class="category" style="background: #666;">🤖 Новости</span>
+                        <h3>2. PerceptionBench: мультимодельные AI "видят" значительно хуже, чем ожидалось</h3>
+                    </a>
+                    <div class="card-links">
+                        <a href="https://htmlpreview.github.io/?https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/17/2-perceptionbench-мультимодельные-ai-видят-значительно-хуже-чем-ожидалось.html" target="_blank" class="preview-btn">👁️ Предпросмотр</a>
+                        <a href="https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/17/2-perceptionbench-мультимодельные-ai-видят-значительно-хуже-чем-ожидалось.html" target="_blank" class="git-btn">📄 GitHub</a>
+                    </div>
+                </div>
+                <div class="news-card">
+                    <a href="2026/08/17/1-anthropics-claude-взломал-aes-шифрование-демонстрация-автономного-криптоанализ.html">
+                        <span class="category" style="background: #666;">🤖 Новости</span>
+                        <h3>1. Anthropic's Claude взломал AES-шифрование — демонстрация автономного криптоанализа</h3>
+                    </a>
+                    <div class="card-links">
+                        <a href="https://htmlpreview.github.io/?https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/17/1-anthropics-claude-взломал-aes-шифрование-демонстрация-автономного-криптоанализ.html" target="_blank" class="preview-btn">👁️ Предпросмотр</a>
+                        <a href="https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/17/1-anthropics-claude-взломал-aes-шифрование-демонстрация-автономного-криптоанализ.html" target="_blank" class="git-btn">📄 GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<div class="news-grid">
-<div class="news-card">
-<div class="num">01</div>
-<h3>📊 Nvidia раскрыла $51 млрд в SpaceX и Intel</h3>
-<p>SEC 13F: $21 млрд в SpaceX, $30 млрд в Intel — 80% equity-портфеля. Круговое финансирование в действии.</p>
-<div class="meta"><span class="tag">💰 Финансы</span><span class="tag">🏢 SEC</span></div>
-<a href="2026/08/16/nvidia-spacex-intel-sec-13f-full.html">Читать полностью →</a>
-</div>
+        <div class="date-section">
+            <div class="date-header">16 August 2026</div>
+            <div class="news-grid">
+                <div class="news-card">
+                    <a href="2026/08/16/qwen-3-billion-downloads-full.html">
+                        <span class="category" style="background: #666;">🌏 Китай / Open Source</span>
+                        <h3>Семейство открытых моделей Qwen от Alibaba превысило 3 млрд загрузок <span style="color: #ffc107;">★</span></h3>
+                    </a>
+                    <div class="card-links">
+                        <a href="https://htmlpreview.github.io/?https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/16/qwen-3-billion-downloads-full.html" target="_blank" class="preview-btn">👁️ Предпросмотр</a>
+                        <a href="https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/16/qwen-3-billion-downloads-full.html" target="_blank" class="git-btn">📄 GitHub</a>
+                    </div>
+                </div>
+                <div class="news-card">
+                    <a href="2026/08/16/openai-enterprise-revenue-full.html">
+                        <span class="category" style="background: #666;">💼 Бизнес</span>
+                        <h3>OpenAI: корпоративная выручка впервые превысила потребительскую <span style="color: #ffc107;">★</span></h3>
+                    </a>
+                    <div class="card-links">
+                        <a href="https://htmlpreview.github.io/?https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/16/openai-enterprise-revenue-full.html" target="_blank" class="preview-btn">👁️ Предпросмотр</a>
+                        <a href="https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/16/openai-enterprise-revenue-full.html" target="_blank" class="git-btn">📄 GitHub</a>
+                    </div>
+                </div>
+                <div class="news-card">
+                    <a href="2026/08/16/nvidia-spacex-intel-sec-13f-full.html">
+                        <span class="category" style="background: #666;">💰 Инвестиции</span>
+                        <h3>Nvidia раскрыла в SEC-файлинге 13F позиции на $51 млрд <span style="color: #ffc107;">★</span></h3>
+                    </a>
+                    <div class="card-links">
+                        <a href="https://htmlpreview.github.io/?https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/16/nvidia-spacex-intel-sec-13f-full.html" target="_blank" class="preview-btn">👁️ Предпросмотр</a>
+                        <a href="https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/16/nvidia-spacex-intel-sec-13f-full.html" target="_blank" class="git-btn">📄 GitHub</a>
+                    </div>
+                </div>
+                <div class="news-card">
+                    <a href="2026/08/16/nvidia-sb-energy-3-billion-full.html">
+                        <span class="category" style="background: #666;">💰 Инвестиции / Инфраструктура</span>
+                        <h3>Nvidia инвестирует до $3 млрд в SB Energy для дата-центра OpenAI в Огайо <span style="color: #ffc107;">★</span></h3>
+                    </a>
+                    <div class="card-links">
+                        <a href="https://htmlpreview.github.io/?https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/16/nvidia-sb-energy-3-billion-full.html" target="_blank" class="preview-btn">👁️ Предпросмотр</a>
+                        <a href="https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/16/nvidia-sb-energy-3-billion-full.html" target="_blank" class="git-btn">📄 GitHub</a>
+                    </div>
+                </div>
+                <div class="news-card">
+                    <a href="2026/08/16/google-gemini-37-flash-full.html">
+                        <span class="category" style="background: #666;">🤖 Модели</span>
+                        <h3>Google выпустил Gemini 3.7 Flash <span style="color: #ffc107;">★</span></h3>
+                    </a>
+                    <div class="card-links">
+                        <a href="https://htmlpreview.github.io/?https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/16/google-gemini-37-flash-full.html" target="_blank" class="preview-btn">👁️ Предпросмотр</a>
+                        <a href="https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/16/google-gemini-37-flash-full.html" target="_blank" class="git-btn">📄 GitHub</a>
+                    </div>
+                </div>
+                <div class="news-card">
+                    <a href="2026/08/16/anthropic-misalignment-risk-full.html">
+                        <span class="category" style="background: #666;">⚠️ Безопасность ИИ</span>
+                        <h3>Anthropic повысила оценку риска неправильного выравнивания до «низкого» <span style="color: #ffc107;">★</span></h3>
+                    </a>
+                    <div class="card-links">
+                        <a href="https://htmlpreview.github.io/?https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/16/anthropic-misalignment-risk-full.html" target="_blank" class="preview-btn">👁️ Предпросмотр</a>
+                        <a href="https://github.com/bimaevoleg-rgb/news/blob/main/2026/08/16/anthropic-misalignment-risk-full.html" target="_blank" class="git-btn">📄 GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<div class="news-card">
-<div class="num">02</div>
-<h3>⚡ Nvidia → SB Energy — $3 млрд</h3>
-<p>Инвестиция в дата-центр-подрядчика SoftBank перед IPO. OpenAI уже арендует площадку в Огайо.</p>
-<div class="meta"><span class="tag">⚡ Энергетика</span><span class="tag">🤝 Инвестиции</span></div>
-<a href="2026/08/16/nvidia-sb-energy-3-billion-full.html">Читать полностью →</a>
-</div>
-
-<div class="news-card">
-<div class="num">03</div>
-<h3>🔥 Google Gemini 3.7 Flash</h3>
-<p>FrontierCode 34.4% → 43.6%, DeepSWE 49% → 65.3%. Цена $0.75 за 1M токенов до конца года.</p>
-<div class="meta"><span class="tag">🤖 Модели</span><span class="tag">💻 Кодинг</span></div>
-<a href="2026/08/16/google-gemini-37-flash-full.html">Читать полностью →</a>
-</div>
-
-<div class="news-card">
-<div class="num">04</div>
-<h3>🏢 OpenAI — $11 млрд от Enterprise</h3>
-<p>Корпоративный сегмент приносит $11 млрд годовых. Рост на 400% за год. Fortune 500 массово внедряют.</p>
-<div class="meta"><span class="tag">🏢 Enterprise</span><span class="tag">📈 Рост</span></div>
-<a href="2026/08/16/openai-enterprise-revenue-full.html">Читать полностью →</a>
-</div>
-
-<div class="news-card">
-<div class="num">05</div>
-<h3>🚀 Qwen 3.5 — 3 млрд скачиваний</h3>
-<p>Новый рекорд open-source: 3B скачиваний. 72B модель бьёт Llama 3.1 405B на MMLU-Pro.</p>
-<div class="meta"><span class="tag">🌏 Китай</span><span class="tag">📥 Open Source</span></div>
-<a href="2026/08/16/qwen-3-billion-downloads-full.html">Читать полностью →</a>
-</div>
-
-<div class="news-card">
-<div class="num">06</div>
-<h3>⚠️ Anthropic — риск «misalignment» повышен</h3>
-<p>С «very low» до «low». Невыпущенная Model 2 способнее Mythos 5. UK AISI: «потенциально вредная активность».</p>
-<div class="meta"><span class="tag">🔒 Безопасность</span><span class="tag">⚠️ Риски</span></div>
-<a href="2026/08/16/anthropic-misalignment-risk-full.html">Читать полностью →</a>
-</div>
-
-<div class="news-card">
-<div class="num">07</div>
-<h3>🇬🇧 Британские букинисты — оптовые заказы для ИИ</h3>
-<p>Магазины подержанных книг фиксируют загадочные массовые скупки. Подозрение: данные для обучения LLM.</p>
-<div class="meta"><span class="tag">📚 Данные</span><span class="tag">🌍 UK</span></div>
-<a href="2026/08/16/uk-bookshops-bulk-orders-ai-full.html">Читать полностью →</a>
-</div>
-
-<div class="news-card">
-<div class="num">08</div>
-<h3>⚖️ Дело Вайоминга: 7000 дипфейков через Grok</h3>
-<p>Женщина присоединилась к иску против xAI: отчим создал 7000+ сексуальных дипфейков из её детского фото.</p>
-<div class="meta"><span class="tag">⚖️ Суд</span><span class="tag">🔒 Безопасность</span></div>
-<a href="2026/08/16/wyoming-grok-deepfake-lawsuit-full.html">Читать полностью →</a>
-</div>
-
-<div class="news-card">
-<div class="num">09</div>
-<h3>🕵️ Mercor охотится за Slack-логами стартапов</h3>
-<p>Скупка архивов умирающих компаний для «reinforcement learning gyms». Anthropic готова потратить $1B+.</p>
-<div class="meta"><span class="tag">🏢 Стартапы</span><span class="tag">📊 Данные</span></div>
-<a href="2026/08/16/mercor-startup-slack-logs-full.html">Читать полностью →</a>
-</div>
-
-<div class="news-card">
-<div class="num">10</div>
-<h3>💰 AI-бум скрывает $70 млрд в off-balance-sheet</h3>
-<p>Гарантии остаточной стоимости не отражены в балансах. Broadcom — $35B для Anthropic, Meta — $27B + $13B.</p>
-<div class="meta"><span class="tag">💰 Финансы</span><span class="tag">⚠️ Риски</span></div>
-<a href="2026/08/16/ai-70-billion-off-balance-sheet-full.html">Читать полностью →</a>
-</div>
-</div>
-
-<footer>
-<p>Автоматически сгенерировано AI-агентом | <a href="https://github.com/bimaevoleg-rgb/news">GitHub</a></p>
-<p>📅 Архив: 16 августа 2026 | Время генерации: 14:40 UTC</p>
-</footer>
-</div>
+        <div class="footer">
+            Составлено с помощью AI • Источники указаны в каждой новости
+        </div>
+    </div>
 </body>
 </html>
