@@ -307,50 +307,50 @@ def slugify(text):
 
 
 def parse_digest(digest_text, date_obj):
-    """Парсит текст дайджеста на отдельные новости."""
+    """Парсит текст дайджеста на отдельные новости. Поддерживает эмодзи, категории, буллеты."""
     news_items = []
     
-    # Разбиваем на секции по категориям
-    category_pattern = r'(?:^|\n)(🏆|🤖|💰|🔓|🔬|🏢|🛡️|⚖️)[^\n]*\n'
-    sections = re.split(category_pattern, digest_text)
+    # Находим все категории и их позиции
+    # Категория: эмодзи + название (без ** внутри) + \n
+    category_pattern = r'(?:^|\n)(🏆|🤖|💰|🔓|🔬|🏢|🛡️|⚖️|🔐|🗣️|📈)[^*\n]*\n'
+    matches = list(re.finditer(category_pattern, digest_text))
     
-    for i in range(1, len(sections), 2):
-        if i + 1 >= len(sections):
-            break
-            
-        emoji = sections[i]
-        section_content = sections[i + 1]
+    for idx, match in enumerate(matches):
+        cat_line = match.group(0).strip()
+        current_category = cat_line
         
-        cat_match = re.search(rf'{emoji}([^\n]+)', section_content[:200])
-        if cat_match:
-            current_category = emoji + cat_match.group(1).strip()
-        else:
-            current_category = emoji + ' Новости'
+        start = match.end()
+        end = matches[idx + 1].start() if idx + 1 < len(matches) else len(digest_text)
+        section_content = digest_text[start:end]
         
-        parts = re.split(r'(?=\*\*[^*]+\*\*)', section_content)
+        # Разбиваем секцию на отдельные новости по пустым строкам (двойной \n)
+        # Каждая новость — блок текста между \n\n
+        raw_blocks = re.split(r'\n\n+', section_content.strip())
         
-        for part in parts:
-            part = part.strip()
-            if not part:
+        for block in raw_blocks:
+            block = block.strip()
+            if not block:
                 continue
-                
-            title_match = re.match(r'\*\*([^*]+)\*\*(.*)', part, re.DOTALL)
+            
+            # Ищем заголовок в **...** (с опциональным эмодзи в начале)
+            title_match = re.search(r'(?:^|\n)\s*(?:[^\s*]+\s+)?\*\*([^*]+)\*\*\s*(.*)', block, re.DOTALL)
             if not title_match:
                 continue
                 
             title = title_match.group(1).strip()
             rest = title_match.group(2).strip()
             
-            if title.endswith('.'):
-                title = title[:-1].strip()
+            if not title or len(title) < 5:
+                continue
             
+            # Собираем контент и источник
             content_lines = []
             source = 'aiweekly.co'
             source_url = ''
             
             for line in rest.split('\n'):
                 line = line.strip()
-                if not line or line.startswith('---'):
+                if not line or line.startswith('---') or line.startswith('*Следующий дайджест'):
                     continue
                 if line.startswith('*(Источник:') or line.startswith('Источник:'):
                     source_raw = re.sub(r'\*?\(Источник:\s*', '', line)
@@ -360,6 +360,9 @@ def parse_digest(digest_text, date_obj):
                     if urls:
                         source_url = urls[0]
                         source = re.sub(r'https?://[^\s\)]+', '', source_raw).strip(' /')
+                    continue
+                # Пропускаем буллеты без текста
+                if line == '•':
                     continue
                 content_lines.append(line)
             
@@ -415,13 +418,16 @@ def generate_news_page(news_item, date_obj, output_dir):
     
     source = news_item['source']
     
-    # Определяем тип контента
+    # Определяем тип контента: полный контент из дайджеста уже является полной версией
     is_full = news_item.get('is_full', False)
-    if is_full:
+    has_full_content = bool(news_item.get('full_content', '').strip())
+    
+    if has_full_content:
         notice = ''
         original_link = f'<div class="original"><a href="{source_url}" target="_blank">🔗 Оригинальная статья</a></div>' if source_url else ''
     else:
-        notice = '<div class="notice">⚡ Это краткая сводка. Полный перевод статьи будет добавлен позже.</div>'
+        # Дайджест уже содержит подробное описание — показываем как полную версию
+        notice = ''
         original_link = f'<div class="original"><a href="{source_url}" target="_blank">🔗 Источник</a></div>' if source_url else ''
     
     html = HTML_TEMPLATE.format(
