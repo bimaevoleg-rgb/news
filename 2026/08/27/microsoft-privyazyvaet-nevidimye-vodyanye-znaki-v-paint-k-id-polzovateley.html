@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microsoft привязывает невидимые водяные знаки в Paint к ID пользователей</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 800px; margin: 0 auto; padding: 24px; line-height: 1.7; color: #222; background: #fafafa; }
+        h1 { color: #1a1a2e; border-bottom: 3px solid #e94560; padding-bottom: 12px; margin-bottom: 8px; }
+        .meta { color: #666; font-size: 0.9em; margin-bottom: 28px; }
+        .category { display: inline-block; background: #e94560; color: white; padding: 4px 14px; border-radius: 4px; font-size: 0.8em; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
+        .content { margin-top: 24px; font-size: 1.05em; }
+        .content p { margin: 0 0 1em 0; }
+        .source { margin-top: 48px; padding: 20px; background: #fff; border-left: 4px solid #e94560; border-radius: 0 8px 8px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        a { color: #e94560; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <span class="category">SECURITY</span>
+    <h1>Microsoft привязывает невидимые водяные знаки в Paint к ID пользователей</h1>
+    <div class="meta">
+        📅 Перевод: 27.08.2026 &nbsp;|&nbsp;
+        🔗 <a href="https://www.theregister.com/ai-and-ml/2026/08/25/microsoft-ai-watermarks-in-paint-and-photos-are-linked-to-user-ids-researcher-finds/5292034" target="_blank" rel="noopener">Оригинал (The Register)</a>
+    </div>
+    <div class="content">
+        <p>Исследователь Сюшэн Ли из Vector 35 обнаружил, что Microsoft Paint и Photos встраивают в ИИ-генерируемые изображения невидимый водяной знак — GUID (глобальный уникальный идентификатор), связанный с конкретным пользователем и запросом. Это позволяет Microsoft теоретически отслеживать автора изображения.</p><p>Когда пользователь создает изображение в Paint, запрос отправляется на серверы Microsoft для модерации, а в ответ возвращается GUID, который кодируется в пиксели. Кроме того, Paint отправляет предыдущий promptGenerationId вместе с новым запросом, позволяя явно связывать последовательные запросы одного пользователя.</p><p>Microsoft является сооснователем коалиции C2PA (Coalition for Content Provenance and Authenticity), которая разрабатывает стандарты для метаданных ИИ-контента. Однако Ли отмечает, что компания недостаточно четко раскрывает наличие GUID в своей документации. Microsoft не ответила на запрос о комментарии. Аналогичные технологии разрабатывают Meta (Content Seal) и OpenAI (SynthID).</p>
+    </div>
+    <div class="source">
+        <strong>Источник:</strong><br>
+        <a href="https://www.theregister.com/ai-and-ml/2026/08/25/microsoft-ai-watermarks-in-paint-and-photos-are-linked-to-user-ids-researcher-finds/5292034" target="_blank" rel="noopener">https://www.theregister.com/ai-and-ml/2026/08/25/microsoft-ai-watermarks-in-paint-and-photos-are-linked-to-user-ids-researcher-finds/5292034</a>
+    </div>
+</body>
+</html>
