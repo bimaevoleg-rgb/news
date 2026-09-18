@@ -496,8 +496,24 @@ def generate_index(all_news, repo_root):
     (repo_root / 'index.html').write_text(index_html, encoding='utf-8')
 
 
+CATEGORY_MAP_EN = {
+    'MODELS': '🤖 Релизы моделей',
+    'ENTERPRISE': '🏢 Enterprise',
+    'SECURITY': '🔐 Безопасность и риски',
+    'REGULATION': '⚖️ Регулирование',
+    'INVESTMENTS': '💰 Инвестиции и сделки',
+    'INFRASTRUCTURE': '🏢 Инфраструктура и enterprise',
+    'RESEARCH': '🔬 Исследования и аналитика',
+    'OPENSOURCE': '🔓 Open-source',
+}
+
+
 def scan_existing_news(repo_root):
-    """Сканирует существующие новости в репозитории."""
+    """Сканирует существующие новости в репозитории.
+    Поддерживает два формата статей:
+    - старый: <title>... — AI Дайджест</title> + <div class="category">
+    - новый: <title>...</title> + <span class="category">
+    """
     all_news = []
     
     for year_dir in sorted(repo_root.iterdir()):
@@ -518,19 +534,35 @@ def scan_existing_news(repo_root):
                     continue
                 
                 for html_file in day_dir.glob('*.html'):
-                    content = html_file.read_text(encoding='utf-8')
-                    title_match = re.search(r'<title>(.+?) — AI Дайджест</title>', content)
-                    cat_match = re.search(r'<div class="category">(.+?)</div>', content)
-                    is_full = 'is_full": true' not in content and '⚡ Это краткая сводка' not in content
+                    # Пропускаем day-pages
+                    if html_file.name == 'index.html':
+                        continue
                     
-                    if title_match:
-                        all_news.append({
-                            'date': date_obj,
-                            'filename': html_file.name,
-                            'title': title_match.group(1),
-                            'category': cat_match.group(1) if cat_match else '🔹 Новости',
-                            'is_full': is_full
-                        })
+                    content = html_file.read_text(encoding='utf-8')
+                    title_match = re.search(r'<title>(.+?)(?: — AI Дайджест)?</title>', content)
+                    if not title_match:
+                        continue
+                    
+                    title = title_match.group(1).strip()
+                    # Пропускаем day-pages со старым форматом заголовка
+                    if title.startswith('AI Дайджест'):
+                        continue
+                    
+                    cat_match = re.search(r'<div class="category">(.+?)</div>', content) \
+                        or re.search(r'<span class="category">(.+?)</span>', content)
+                    category = cat_match.group(1).strip() if cat_match else '🔹 Новости'
+                    # Маппинг английских категорий нового формата
+                    category = CATEGORY_MAP_EN.get(category, category)
+                    
+                    is_full = '⚡ Это краткая сводка' not in content
+                    
+                    all_news.append({
+                        'date': date_obj,
+                        'filename': html_file.name,
+                        'title': title,
+                        'category': category,
+                        'is_full': is_full
+                    })
     
     return sorted(all_news, key=lambda x: (x['date'], x['filename']), reverse=True)
 
